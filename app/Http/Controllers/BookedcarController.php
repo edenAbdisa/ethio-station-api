@@ -14,7 +14,7 @@ class BookedcarController extends Controller
      */
     public function index()
     {
-        //
+        return Bookedcar::all();
     }
 
     /**
