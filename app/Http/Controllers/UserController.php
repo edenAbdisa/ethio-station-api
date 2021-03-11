@@ -15,7 +15,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::all();
+        $users=User::all();
+        return response($users,200);
     }
     public function login(Request $request){
     	$user= User::where('email',$request->email)->first();
@@ -25,7 +26,7 @@ class UserController extends Controller
     		   $token=$user->createToken('Laravel Password Grant Client')->accessToken;
     		   $user['remember_token']= $token;
     		   $response=['user'=> $user];
-    		   return $user->save()? response($response,200):
+    		   return $user->save()? response($token,200):
     			  "Couldn't provide token for user"; 
     		}else{
     		   $response=["message"=>"Password mismatch"];
@@ -36,14 +37,16 @@ class UserController extends Controller
     		return response($response,422);
     	}
     }
+
     public function logout(Request $request){ 
 	$token= $request->user()->token();
 	$token->revoke();
 	$user= User::where('id',$token->user_id)->first();
 	$user['remember_token']='';
 	$response['message'] = $user->save()? 'You have been successfully logged out!':'We could not successfully log out your account please try again!';
-	return response($response,200);	
+	return response($response,201);	
     }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -62,16 +65,19 @@ class UserController extends Controller
     	$user['remember_token']= $token;
 	$saveduser= $user->save();
 	  if($saveduser){
-        	$response=['user'=> $saveduser];
-		$response=['message'=>'Successfully registered'];
+        	$response=['remember_token'=> $token];
+		    $response=['message'=>'Successfully registered'];
           }else{
-		$response=['user'=> $saveduser];
+		$response=['remember_token'=> ''];
 		$response=['message'=>'Could not register user'];
+        return response($response,404);
 	  }
 	}else{
+        $response=['remember_token'=> ''];
 		$response=['message'=>'An account already exist by this email please login'];
+        return response($response,301);
 	}
-   	return response($response,200);
+   	return response($response,201);
     }
 
     /**
@@ -81,15 +87,31 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        return User::find($id);
+    { 
+        $user= User::where('remember_token',$id)->first();
+        if($user){
+            return response($user,201);
+        }else{
+            return response($user,404);
+        }
+        
+    
     }
 
     public function update(Request $request,  $id)
     {
-        $user = User::findOrFail($id);
-        $input = $request->all();
-        return $user->fill($input)->save(); 
+        $user = User::find($id);
+        if($user){
+            $input = $request->all();
+            $result= $user->fill($input)->save(); 
+            if($result){
+                return response($user,201);
+            }else{
+                return response($user,500);
+            }
+        }else{
+            return response($user,404);
+        }
     }
     /**
      * Remove the specified resource from storage.
@@ -100,6 +122,15 @@ class UserController extends Controller
     public function destroy( $id)
     {
         $user = User::findOrFail($id);
-        $user->delete();
+        if($user){ 
+            if($user->delete()){
+                return response(true,200);
+            }else{
+                return response(false,500);
+            }
+        }else{
+            return response($user,404);
+        }
+        
     }
 }
