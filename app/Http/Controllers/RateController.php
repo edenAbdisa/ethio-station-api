@@ -14,7 +14,8 @@ class RateController extends Controller
      */
     public function index()
     {
-        return Rate::all();
+        return response(Rate::all(),200);
+       
     }
 
     /**
@@ -24,7 +25,7 @@ class RateController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -35,7 +36,14 @@ class RateController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input = $request->all(); 
+        $rate=Rate::create($input);
+        $rate= $rate->save();
+        if($rate){
+            return response($rate->id,200);
+        }else{
+            return response('',500);
+        }
     }
 
     /**
@@ -44,9 +52,14 @@ class RateController extends Controller
      * @param  \App\Models\Rate  $rate
      * @return \Illuminate\Http\Response
      */
-    public function show(Rate $rate)
+    public function show( $id)
     {
-        //
+        $rate= Rate::where('id',$id)->first();
+        if($rate){
+            return response($rate,200);
+        }else{
+            return response($rate,404);
+        }
     }
 
     /**
@@ -67,9 +80,20 @@ class RateController extends Controller
      * @param  \App\Models\Rate  $rate
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Rate $rate)
+    public function update(Request $request, $id)
     {
-        //
+        $rate = Rate::find($id);
+        if($rate){
+            $input = $request->all();
+            $result= $rate->fill($input)->save(); 
+            if($result){
+                return response($rate,201);
+            }else{
+                return response($rate,500);
+            }
+        }else{
+            return response($rate,404);
+        }
     }
 
     /**
@@ -78,8 +102,17 @@ class RateController extends Controller
      * @param  \App\Models\Rate  $rate
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Rate $rate)
+    public function destroy($id)
     {
-        //
+        $rate = Rate::findOrFail($id);
+        if($rate){ 
+            if($rate->delete()){
+                return response(true,200);
+            }else{
+                return response(false,500);
+            }
+        }else{
+            return response($rate,404);
+        }
     }
 }

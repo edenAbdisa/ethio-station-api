@@ -14,7 +14,8 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        return Categories::all();
+        return response(Categories::all(),200);
+       
     }
 
     /**
@@ -24,7 +25,7 @@ class CategoriesController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -35,7 +36,14 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input = $request->all(); 
+        $categories=Categories::create($input);
+        $categories= $categories->save();
+        if($categories){
+            return response($categories->id,200);
+        }else{
+            return response('',500);
+        }
     }
 
     /**
@@ -44,9 +52,14 @@ class CategoriesController extends Controller
      * @param  \App\Models\Categories  $categories
      * @return \Illuminate\Http\Response
      */
-    public function show(Categories $categories)
+    public function show( $id)
     {
-        //
+        $categories= Categories::where('id',$id)->first();
+        if($categories){
+            return response($categories,200);
+        }else{
+            return response($categories,404);
+        }
     }
 
     /**
@@ -67,9 +80,20 @@ class CategoriesController extends Controller
      * @param  \App\Models\Categories  $categories
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Categories $categories)
+    public function update(Request $request, $id)
     {
-        //
+        $categories = Categories::find($id);
+        if($categories){
+            $input = $request->all();
+            $result= $categories->fill($input)->save(); 
+            if($result){
+                return response($categories,201);
+            }else{
+                return response($categories,500);
+            }
+        }else{
+            return response($categories,404);
+        }
     }
 
     /**
@@ -78,8 +102,17 @@ class CategoriesController extends Controller
      * @param  \App\Models\Categories  $categories
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Categories $categories)
+    public function destroy($id)
     {
-        //
+        $categories = Categories::findOrFail($id);
+        if($categories){ 
+            if($categories->delete()){
+                return response(true,200);
+            }else{
+                return response(false,500);
+            }
+        }else{
+            return response($categories,404);
+        }
     }
 }

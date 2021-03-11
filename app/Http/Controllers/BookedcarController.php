@@ -14,7 +14,8 @@ class BookedcarController extends Controller
      */
     public function index()
     {
-        return Bookedcar::all();
+        return response(Bookedcar::all(),200);
+       
     }
 
     /**
@@ -24,7 +25,7 @@ class BookedcarController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -35,7 +36,14 @@ class BookedcarController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input = $request->all(); 
+        $bookedcar=Bookedcar::create($input);
+        $bookedcar= $bookedcar->save();
+        if($bookedcar){
+            return response($bookedcar->id,200);
+        }else{
+            return response('',500);
+        }
     }
 
     /**
@@ -44,9 +52,14 @@ class BookedcarController extends Controller
      * @param  \App\Models\Bookedcar  $bookedcar
      * @return \Illuminate\Http\Response
      */
-    public function show(Bookedcar $bookedcar)
+    public function show( $id)
     {
-        //
+        $bookedcar= Bookedcar::where('id',$id)->first();
+        if($bookedcar){
+            return response($bookedcar,200);
+        }else{
+            return response($bookedcar,404);
+        }
     }
 
     /**
@@ -67,9 +80,20 @@ class BookedcarController extends Controller
      * @param  \App\Models\Bookedcar  $bookedcar
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Bookedcar $bookedcar)
+    public function update(Request $request, $id)
     {
-        //
+        $bookedcar = Bookedcar::find($id);
+        if($bookedcar){
+            $input = $request->all();
+            $result= $bookedcar->fill($input)->save(); 
+            if($result){
+                return response($bookedcar,201);
+            }else{
+                return response($bookedcar,500);
+            }
+        }else{
+            return response($bookedcar,404);
+        }
     }
 
     /**
@@ -78,8 +102,17 @@ class BookedcarController extends Controller
      * @param  \App\Models\Bookedcar  $bookedcar
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Bookedcar $bookedcar)
+    public function destroy($id)
     {
-        //
+        $bookedcar = Bookedcar::findOrFail($id);
+        if($bookedcar){ 
+            if($bookedcar->delete()){
+                return response(true,200);
+            }else{
+                return response(false,500);
+            }
+        }else{
+            return response($bookedcar,404);
+        }
     }
 }

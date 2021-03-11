@@ -34,17 +34,28 @@ class UserController extends Controller
     		}
     	}else{
     		$response=['message'=>'User doesnt not exist'];
-    		return response($response,422);
+    		return response($response,404);
     	}
     }
 
     public function logout(Request $request){ 
-	$token= $request->user()->token();
-	$token->revoke();
-	$user= User::where('id',$token->user_id)->first();
-	$user['remember_token']='';
-	$response['message'] = $user->save()? 'You have been successfully logged out!':'We could not successfully log out your account please try again!';
-	return response($response,201);	
+
+    $user= User::where('id',$token->user_id)->first();
+    if($user){
+        $token= $request->user()->token();
+        $token->revoke();
+        $user['remember_token']='';
+        $result=$user->save();
+        if($result){
+            return response($result,201);
+        }else{
+            return response($result,500);
+        }
+    }else{
+        return response($result,404);
+    }
+	
+		
     }
 
     /**
@@ -90,7 +101,7 @@ class UserController extends Controller
     { 
         $user= User::where('remember_token',$id)->first();
         if($user){
-            return response($user,201);
+            return response($user,200);
         }else{
             return response($user,404);
         }

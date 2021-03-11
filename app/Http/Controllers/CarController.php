@@ -14,7 +14,8 @@ class CarController extends Controller
      */
     public function index()
     {
-        //
+        return response(Car::all(),200);
+       
     }
 
     /**
@@ -24,7 +25,7 @@ class CarController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -35,7 +36,14 @@ class CarController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input = $request->all(); 
+        $car=Car::create($input);
+        $car= $car->save();
+        if($car){
+            return response($car->id,200);
+        }else{
+            return response('',500);
+        }
     }
 
     /**
@@ -44,9 +52,14 @@ class CarController extends Controller
      * @param  \App\Models\Car  $car
      * @return \Illuminate\Http\Response
      */
-    public function show(Car $car)
+    public function show( $id)
     {
-        //
+        $car= Car::where('id',$id)->first();
+        if($car){
+            return response($car,200);
+        }else{
+            return response($car,404);
+        }
     }
 
     /**
@@ -67,9 +80,20 @@ class CarController extends Controller
      * @param  \App\Models\Car  $car
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Car $car)
+    public function update(Request $request, $id)
     {
-        //
+        $car = Car::find($id);
+        if($car){
+            $input = $request->all();
+            $result= $car->fill($input)->save(); 
+            if($result){
+                return response($car,201);
+            }else{
+                return response($car,500);
+            }
+        }else{
+            return response($car,404);
+        }
     }
 
     /**
@@ -78,8 +102,17 @@ class CarController extends Controller
      * @param  \App\Models\Car  $car
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Car $car)
+    public function destroy($id)
     {
-        //
+        $car = Car::findOrFail($id);
+        if($car){ 
+            if($car->delete()){
+                return response(true,200);
+            }else{
+                return response(false,500);
+            }
+        }else{
+            return response($car,404);
+        }
     }
 }
