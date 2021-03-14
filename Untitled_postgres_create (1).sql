@@ -34,7 +34,21 @@ CREATE TABLE "Car" (
   OIDS=FALSE
 );
 
-
+ethio-station-api::DATABASE=> create table hotels(
+ id serial PRIMARY KEY, name VARCHAR(50) NOT NULL, 
+ numberofroom INT NOT NULL, location VARCHAR(255) NOT NULL,
+  contact VARCHAR(50) NOT NULL);
+create table hikings( 
+	id serial PRIMARY KEY, 
+	organizer VARCHAR(50), dday DATE NOT NULL, 
+	location VARCHAR(255) NOT NULL, contact VARCHAR(50) NOT NULL,
+	 name VARCHAR(50), 
+	price float, status VARCHAR(20));
+create table resturant( id serial PRIMARY KEY, name VARCHAR(50) NOT NULL, 
+ location VARCHAR(255) NOT NULL, contact VARCHAR(50) NOT NULL);
+create table tourguides( id serial PRIMARY KEY, name VARCHAR(50) NOT NULL,
+ workinglanguage TEXT NOT NULL, 
+	location VARCHAR(255) NOT NULL, contact VARCHAR(50) NOT NULL);
 
 CREATE TABLE "Rate" (
 	"id" serial NOT NULL UNIQUE,
