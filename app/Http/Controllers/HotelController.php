@@ -45,6 +45,21 @@ class HotelController extends Controller
             return response('',500);
         }
     }
+	/**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Hotel  $hotel
+     * @return \Illuminate\Http\Response
+     */
+    public function showbyname( $name)
+    {
+        $hotel= Hotel::where('name',$name);
+        if($hotel){
+            return response($hotel,200);
+        }else{
+            return response($hotel,404);
+        }
+    }
 
     /**
      * Display the specified resource.

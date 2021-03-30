@@ -53,6 +53,7 @@ Route::put('/hiking/{id}','HikingController@update');
 Route::delete('/hiking/{id}','HikingController@destroy');
 
 Route::get('/hotel','HotelController@index');
+Route::get('/hotel/{name}','HotelController@showbyname');
 Route::get('/hotel/{id}','HotelController@show');
 Route::post('/hotel','HotelController@store');
 Route::put('/hotel/{id}','HotelController@update');
