@@ -62,6 +62,22 @@ class TourguideController extends Controller
         }
     }
 
+ /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Tourguide  $tourguide
+     * @return \Illuminate\Http\Response
+     */
+    public function showbyname( $name)
+    {
+        $tourguide= Tourguide::where('name',$name)->first();
+        if($tourguide){
+            return response($tourguide,200);
+        }else{
+            return response($tourguide,404);
+        }
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

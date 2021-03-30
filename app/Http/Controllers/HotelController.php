@@ -53,7 +53,7 @@ class HotelController extends Controller
      */
     public function showbyname( $name)
     {
-        $hotel= Hotel::where('name',$name);
+        $hotel= Hotel::where('name',$name)->first();
         if($hotel){
             return response($hotel,200);
         }else{

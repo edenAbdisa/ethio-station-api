@@ -62,6 +62,22 @@ class ResturantController extends Controller
         }
     }
 
+	/**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Resturant  $resturant
+     * @return \Illuminate\Http\Response
+     */
+    public function showbyname( $name)
+    {
+        $resturant= Resturant::where('name',$name)->first();
+        if($resturant){
+            return response($resturant,200);
+        }else{
+            return response($resturant,404);
+        }
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

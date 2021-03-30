@@ -62,6 +62,22 @@ class HikingController extends Controller
         }
     }
 
+	/**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Hiking  $hiking
+     * @return \Illuminate\Http\Response
+     */
+    public function showbyname( $name)
+    {
+        $hiking= Hiking::where('name',$name)->first();
+        if($hiking){
+            return response($hiking,200);
+        }else{
+            return response($hiking,404);
+        }
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

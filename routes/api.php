@@ -48,12 +48,13 @@ Route::delete('/categories/{id}','CategoriesController@destroy');
 
 Route::get('/hiking','HikingController@index');
 Route::get('/hiking/{id}','HikingController@show');
+Route::get('/hiking/name/{name}','HikingController@showbyname');
 Route::post('/hiking','HikingController@store');
 Route::put('/hiking/{id}','HikingController@update');
 Route::delete('/hiking/{id}','HikingController@destroy');
 
 Route::get('/hotel','HotelController@index');
-Route::get('/hotel/{name}','HotelController@showbyname');
+Route::get('/hotel/name/{name}','HotelController@showbyname');
 Route::get('/hotel/{id}','HotelController@show');
 Route::post('/hotel','HotelController@store');
 Route::put('/hotel/{id}','HotelController@update');
@@ -61,12 +62,14 @@ Route::delete('/hotel/{id}','HotelController@destroy');
 
 Route::get('/tourguide','TourguideController@index');
 Route::get('/tourguide/{id}','TourguideController@show');
+Route::get('/tourguide/name/{name}','TourguideController@showbyname');
 Route::post('/tourguide','TourguideController@store');
 Route::put('/tourguide/{id}','TourguideController@update');
 Route::delete('/tourguide/{id}','TourguideController@destroy');
 
 Route::get('/resturant','ResturantController@index');
 Route::get('/resturant/{id}','ResturantController@show');
+Route::get('/resturant/name/{name}','ResturantController@showbyname');
 Route::post('/resturant','ResturantController@store');
 Route::put('/resturant/{id}','ResturantController@update');
 Route::delete('/resturant/{id}','ResturantController@destroy');
