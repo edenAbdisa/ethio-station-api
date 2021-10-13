@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Hiking;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Exception;
 class HikingController extends Controller
 {
     /**
